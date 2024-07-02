@@ -3,7 +3,9 @@ import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from
 
 import { Server } from "socket.io";
 
-@WebSocketGateway()
+@WebSocketGateway({
+    cors:{origin:['http://localhost:3000']}
+})
 export class MyGeteWay implements OnModuleInit{
     onModuleInit() {
         this.server.on('connection', (socket) => {
@@ -17,24 +19,12 @@ export class MyGeteWay implements OnModuleInit{
 
     @SubscribeMessage('newMessage')
     onNewMessage(@MessageBody() body:any){
-        console.log(body, "hi");
-        this.server.emit('onMassage',{
-            msg:'New Messsage',
-            content:body
-        });
-        this.server.emit('new',{
-            msg:'New ',
-            content:body
-        });
-        
-    }   
-    @SubscribeMessage('test')
-    onTestMessage(@MessageBody() body:any){
         console.log(body);
-        
-        this.server.emit('onMassage',{
+        this.server.emit('onMessage',{
             msg:'New Messsage',
             content:body
         });
+
     }   
+   
 }
